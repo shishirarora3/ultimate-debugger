@@ -1,0 +1,17 @@
+{
+    "name": "Ultimate Debugger",
+    "version": "1.0",
+    "manifest_version": 2,
+    "permissions": [
+          "tabs",
+          "contextMenus"
+        ],
+        
+    "content_scripts": [{
+        "js": ["contentscript.js"],
+        "css": ["styles.css"],
+        "matches": ["<all_urls>"]
+    }],//cannot use chrome apis
+    "web_accessible_resources": ["jquery.js","generate-table.js","script.js"],
+    "devtools_page": "devtools.html"
+}
