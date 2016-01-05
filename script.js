@@ -1,34 +1,3 @@
-(function($) {
-    $.eventReport = function(selector, root) {
-        var s = [];
-        $(selector || '*', root).addBack().each(function() {
-            var e = $._data(this, 'events');
-            if(!e) return;
-            var tagGroup = this.tagName || "document";
-            if(this.id) tagGroup += '#' + this.id;
-            if(this.className) tagGroup += '.' + this.className.replace(/ +/g, '.');
-
-            var delegates = [];
-            for(var p in e) {
-                var r = e[p];
-                var h = r.length - r.delegateCount;
-
-                if(h)
-                    s.push([tagGroup, p + ' handler' + (h > 1 ? 's' : '')]);
-
-                if(r.delegateCount) {
-                    for(var q = 0; q < r.length; q++)
-                        if(r[q].selector) s.push([tagGroup + ' delegates', p + ' for ' + r[q].selector]);
-                }
-            }
-        });
-        return s;
-    }
-    $.fn.eventReport = function(selector) {
-        return $.eventReport(selector, this);
-    }
-})(jQuery);
-
 
 
 
@@ -58,6 +27,16 @@ ct({r1:{c1:1, c2:2, c3:3}, r2:{c1:"foo", c2:false, c3:undefined}});
 ct([[1,2,3], [2,3,4]]);
 
 columns will be sortable too :)
+// Demethodizing the Array method, forEach(),  into a generic "each"
+var each = Function.prototype.call.bind([].forEach);
+
+var nodeList = document.querySelectorAll("p");
+
+each(nodeList,bold);
+
+function bold(node){
+   node.style.fontWeight ="bold";
+}
 
 */
 var stringConversion = function(tempVal, curFinalizeValIter){
@@ -123,6 +102,7 @@ consoleTableNew = (function(){
 			pObjA[currentKey] = finalizeVal.call(scope,obj);
 		});
 		console.table(pObjA);
+		$('body').dynatable();
 		$('body').generateTable(pObjA);
 		return pObjA;
 	};
@@ -131,8 +111,16 @@ consoleTableNew = (function(){
 
 ct= consoleTableNew;
 
+var data = eval('[{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Case ID","length":18,"key":"Id","type":"ID"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Deleted","length":0,"key":"IsDeleted","type":"BOOLEAN"},{"createAble":true,"updateAble":true,"searchAble":true,"referenceTypes":["CONTACT"],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Contact ID","length":18,"key":"ContactId","type":"REFERENCE"},{"createAble":true,"updateAble":true,"searchAble":true,"referenceTypes":["ACCOUNT"],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Account ID","length":18,"key":"AccountId","type":"REFERENCE"},{"createAble":true,"updateAble":true,"searchAble":true,"referenceTypes":[],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Asset ID","length":18,"key":"AssetId","type":"REFERENCE"},{"createAble":true,"updateAble":true,"searchAble":true,"referenceTypes":["CASE"],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Parent Case ID","length":18,"key":"ParentId","type":"REFERENCE"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Closed","length":0,"key":"IsClosed","type":"BOOLEAN"},{"createAble":true,"updateAble":true,"searchAble":true,"referenceTypes":["USER"],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Owner ID","length":18,"key":"OwnerId","type":"REFERENCE"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":["USER"],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Created By ID","length":18,"key":"CreatedById","type":"REFERENCE"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Last Modified Date","length":0,"key":"LastModifiedDate","type":"DATETIME"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":["USER"],"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Last Modified By ID","length":18,"key":"LastModifiedById","type":"REFERENCE"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"System Modstamp","length":0,"key":"SystemModstamp","type":"DATETIME"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Last Viewed Date","length":0,"key":"LastViewedDate","type":"DATETIME"},{"createAble":false,"updateAble":false,"searchAble":true,"referenceTypes":null,"picklistValues":null,"picklistValuesLabels":null,"controllingFieldKey":null,"pickListFieldValues":null,"required":false,"label":"Last Referenced Date","length":0,"key":"LastReferencedDate","type":"DATETIME"}]');
 
-
+$(function(){
+	$('body').generateTable(data,['label','key','type'])
+    .find('table').bootstrapTable({
+            data: data,
+            idField: 'name',
+      	search: true
+	});
+});
 
 
 

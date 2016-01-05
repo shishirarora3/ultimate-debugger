@@ -1,0 +1,74 @@
+/store all ajax response
+/*var ajaxResponses = [];
+function clone(obj) {
+    var temp = {};
+    for(var key in obj){
+    	temp[key] = obj[key];
+    }
+    return temp;
+}
+/*(function(){
+		var oldSend = XMLHttpRequest.prototype.send;
+		
+        // override the native send()
+        XMLHttpRequest.prototype.send = function(){
+        	var that= this,
+        	request = arguments[0];
+        	that.onreadystatechange=function(){
+        		console.log(arguments);
+        		var  responseText = that.responseText,
+	            	responseURL = that.responseURL,
+		            storeObj = {
+		            	response: responseText,
+		            	url: responseURL,
+		            	request: request
+		            };
+	            ajaxResponses.push(clone(storeObj));
+		    };
+        	
+            // call the native send()
+            oldSend.apply(that, arguments);
+        }
+        
+})();*/
+/*(function($,jAjax,ajaxResponses){
+		var that= this;
+        	
+        $.ajax.prototype = function(payload){
+        	console.log(arguments);
+        	var that = this;
+        	return jAjax.call(that, payload).done(function(data){
+        		console.log(arguments);
+    			ajaxResponses.push(data);
+        	});
+
+        };
+})($,$.ajax,ajaxResponses);
+var find = function(key){
+	var filteredAjaxRequests = ajaxRequests.filter(
+	function(n){
+		var o = {request : n};
+		var b = JSON.parse(JSON.stringify(o));
+		var parsedRequest = b.request[0];
+		return parsedRequest !== null && parsedRequest.indexOf(key) !== -1;
+	});
+
+	console.table(filteredAjaxRequests);
+}*/
+
+$.makeTable = function (mydata) {
+    var table = $('<table border=1>');
+    var tblHeader = "<tr>";
+    for (var k in mydata[0]) tblHeader += "<th>" + k + "</th>";
+    tblHeader += "</tr>";
+    $(tblHeader).appendTo(table);
+    $.each(mydata, function (index, value) {
+        var TableRow = "<tr>";
+        $.each(value, function (key, val) {
+            TableRow += "<td>" + val + "</td>";
+        });
+        TableRow += "</tr>";
+        $(table).append(TableRow);
+    });
+    return $(table);
+};
